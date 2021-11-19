@@ -64,7 +64,7 @@ const contactUser = async (req, res, next) => {
             <li><b>Nombre completo:</b> ${name} ${lastName}</li>
             <li><b>Email:</b> ${email}</li>
             <li><b>Teléfono:</b> ${tel}</li>
-            <li><b>Propiedad:</b><a href="http://localhost:3000/alquileres/${property}">Vivienda ofrecida</a></li>
+            <li><b>Propiedad:</b><a href="http://192.168.1.16:3000/alquileres/${property}">Vivienda ofrecida</a></li>
           </ul>
           <br/>
           ${comentarios}

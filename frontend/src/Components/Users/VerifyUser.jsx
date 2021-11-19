@@ -6,9 +6,9 @@ export default function VerifyUser({ match }) {
   const [Message, setMessage] = useState('');
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      `http://localhost:4000/users/validate/${match.params.registrationCode}`,
+      `http://192.168.1.16:4000/users/validate/${match.params.registrationCode}`,
       (data) => {
         setMessage(data.message);
       },
@@ -16,10 +16,10 @@ export default function VerifyUser({ match }) {
         setMessage(error.message);
       },
       null,
-      controller
+      null
     );
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, [match.params.registrationCode]);
 

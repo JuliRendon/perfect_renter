@@ -86,7 +86,7 @@ const editUserPass = async (req, res, next) => {
         <tfoot>
             <th>
                 <button>
-                <a href="http://localhost:4000/users/validate/${regCode}"
+                <a href="http://192.168.1.16:4000/users/validate/${regCode}"
                 >VERIFICAR CONTRASEÑA</a></button>
             </th>
         </tfoot>

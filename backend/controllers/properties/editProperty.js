@@ -492,9 +492,8 @@ const editProperty = async (req, res, next) => {
      * Actualizamos la descripction de la vivienda.
      *
      */
-    if (property[0].description !== description) {
+    if (description && property[0].description !== description) {
       // Actualizamos la información en la base de datos.
-      console.log(req.body.description);
       await connection.query(
         `UPDATE properties SET description = ?, modifiedAt = ? WHERE idProperty = ?`,
         [description, modifiedAt, idProperty]

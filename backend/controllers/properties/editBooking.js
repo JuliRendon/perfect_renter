@@ -92,12 +92,12 @@ const editBooking = async (req, res, next) => {
       <tfoot>
         <th>
             <button>
-              <a href="http://localhost:3000/alquileres/${newBookingCode}/accept"
+              <a href="http://192.168.1.16:3000/alquileres/${newBookingCode}/accept"
             >ACEPTAR RESERVA</a></button>
             <span><span/>
             <span><span/>
             <button>
-              <a href="http://localhost:3000/alquileres/${newBookingCode}/cancel"
+              <a href="http://192.168.1.16:3000/alquileres/${newBookingCode}/cancel"
             >CANCELAR RESERVA</a></button>
         </th>
       </tfoot>
@@ -130,7 +130,7 @@ const editBooking = async (req, res, next) => {
       <tfoot>
         <th>
         <button>
-            <a href="http://localhost:3000/alquileres/${newBookingCode}/cancel">CANCELAR RESERVA</a>
+            <a href="http://192.168.1.16:3000/alquileres/${newBookingCode}/cancel">CANCELAR RESERVA</a>
         </button>
         </th>
       </tfoot>

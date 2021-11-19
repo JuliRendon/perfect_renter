@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import { del, get } from '../../Helpers/Api';
 import NewProperty from './NewProperty';
 import Carousel from 'react-material-ui-carousel';
+import { Message } from '../Properties/PropertyInfo';
+
 export default function Property({
   property,
   token,
@@ -18,15 +20,16 @@ export default function Property({
   mountOn,
 }) {
   const [SlideImgs, setSlideImgs] = useState([]);
+  const [message, setMessage] = useState({ message: '', status: '' });
   const [Overlay, setOverlay] = useState({
     shown: false,
     form: '',
   });
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      `http://localhost:4000/properties/${property.idProperty}/photos`,
+      `http://192.168.1.16:4000/properties/${property.idProperty}/photos`,
       (data) => {
         if (data.status === 'ok' && mountOn === 'propertiesList') {
           setSlideImgs(data.photos.slice(0, 5));
@@ -36,12 +39,12 @@ export default function Property({
           setSlideImgs(data.photos);
         }
       },
-      (error) => console.log(error),
+      (error) => setMessage({ message: error.message, status: 'error' }),
       null,
-      controller
+      null
     );
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, [property.idProperty, mountOn]);
 
@@ -51,13 +54,12 @@ export default function Property({
 
   function onSubmitDeleted(body, e) {
     del(
-      `http://localhost:4000/properties/${property.idProperty}`,
+      `http://192.168.1.16:4000/properties/${property.idProperty}`,
       body,
       (data) => {
-        alert(data.message);
-        window.location.reload();
+        setMessage({ message: data.message, status: 'ok' });
       },
-      (error) => console.log(error),
+      (error) => setMessage({ message: error.message, status: 'error' }),
       token
     );
   }
@@ -72,6 +74,7 @@ export default function Property({
         />
       )}
 
+      {message.message && <Message message={message} setMessage={Message} />}
       <article
         className={`
         ${
@@ -119,7 +122,7 @@ export default function Property({
                   <img
                     key={i}
                     className='object-cover w-full h-48'
-                    src={'http://localhost:4000/photo/' + img.name}
+                    src={'http://192.168.1.16:4000/photo/' + img.name}
                     alt='default'
                   />
                 );
@@ -152,7 +155,8 @@ export default function Property({
               {(mountOn === 'profile' || mountOn === 'propertiesList') && (
                 <div className='sm:w-72 pt-2 text-base'>
                   <p className='overflow-hidden'>
-                    {property.description.slice(0, 100)}...
+                    {property.description && property.description.slice(0, 100)}
+                    ...
                   </p>
                 </div>
               )}

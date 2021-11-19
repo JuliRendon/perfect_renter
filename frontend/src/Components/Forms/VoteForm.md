@@ -54,7 +54,7 @@ function ConfirmMessage({ Message }) {
   return (
     <div className='flex-col z-20 absolute left-0 top-0 right-0 bottom-0 bg-gray-700 bg-opacity-30 h-screen  shadow-2xl p-20 flex items-center justify-between'>
       <section className='confirm-message m-auto font-medium p-4 border-2 border-gray-700 flex flex-col items-center gap-5 bg-gray-100 relative text-principal-gris overflow-y-scroll md:w-3/4'>
-        <h1>{Message && Message}</h1>
+        <h1>{message.message && Message}</h1>
         <button
           onClick={() => {
             reset();
@@ -70,7 +70,7 @@ function ConfirmMessage({ Message }) {
 }
 
 <div className='overlay z-30 p-4 bg-white bg-opacity-75  w-full h-full left-0 top-0 flex flex-col items-center pt-24 overflow-auto sm:overflow-hidden'>
-  {Message && <ConfirmMessage Message={Message} />}
+  {message.message && <ConfirmMessage Message={Message} />}
   <section className='contact p-4 filter drop-shadow-xl flex flex-col gap-5 bg-white relative text-principal-gris overflow-y-auto md:w-3/4'>
     <button className='close-overlay absolute top-3 p-5 right-2'>
       <FaPlus className='transform scale-150 rotate-45' />

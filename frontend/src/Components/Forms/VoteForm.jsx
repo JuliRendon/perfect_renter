@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaPlus, FaStar } from 'react-icons/fa';
 import { capitalizeFirstLetter, CreateFormData, post } from '../../Helpers/Api';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function VoteForm({ setOverlay, info, Token }) {
   // Estados
   // Estado con el id de la propiedad a votar
   const [Property, setProperty] = useState({});
   // Estado con el mensaje de confirmación al votar
-  const [Message, setMessage] = useState();
+  const [message, setMessage] = useState({ message: '', status: '' });
   // Estado con la selección de la propiedad en caso de que haya más de una
   const [SelectProperty, setSelectProperty] = useState(false);
   // Valoración al hacer click
@@ -40,10 +40,10 @@ export default function VoteForm({ setOverlay, info, Token }) {
     e.preventDefault();
     if (body.voteValueRenter && body.commentary && Property) {
       post(
-        `http://localhost:4000/users/${info.idUser}/votes`,
+        `http://192.168.1.16:4000/users/${info.idUser}/votes`,
         CreateFormData({ ...body, idProperty: Property }),
         (data) => {
-          setMessage(data.message);
+          setMessage({ message: data.message, status: 'ok' });
         },
         (error) => {
           console.error(error);
@@ -63,7 +63,7 @@ export default function VoteForm({ setOverlay, info, Token }) {
 
   return (
     <div className='overlay z-30 p-4 bg-white bg-opacity-75 fixed w-full h-full left-0 top-0 flex flex-col items-center pt-24 overflow-auto sm:overflow-hidden'>
-      {Message && <ConfirmMessage Message={Message} />}
+      {message.message && <Message setMessage={setMessage} message={message} />}
       {SelectProperty && (
         <PropertiesToVote
           info={info}
@@ -90,7 +90,7 @@ export default function VoteForm({ setOverlay, info, Token }) {
               className='w-60 h-60 object-cover rounded-circle'
               src={
                 info.avatar
-                  ? 'http://localhost:4000/photo/' + info.avatar
+                  ? 'http://192.168.1.16:4000/photo/' + info.avatar
                   : require('../../Images/defProfile.png').default
               }
               alt=''
@@ -229,7 +229,7 @@ function PropertiesToVote({
                         className='w-60 h-60 object-cover rounded-circle'
                         src={
                           info.avatar
-                            ? `http://localhost:4000/photo/${info.avatar}`
+                            ? `http://192.168.1.16:4000/photo/${info.avatar}`
                             : require('../../Images/defProfile.png').default
                         }
                         alt='imagen de perfil'

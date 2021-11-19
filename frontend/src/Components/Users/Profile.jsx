@@ -32,6 +32,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { format } from 'date-fns';
 import esEsLocale from 'date-fns/locale/es';
 import { Box } from '@mui/system';
+import { Message } from '../Properties/PropertyInfo';
 
 export default function Profile({ token, setToken }) {
   const [User, setUser] = useState({});
@@ -46,21 +47,21 @@ export default function Profile({ token, setToken }) {
   const [Votes, setVotes] = useState([]);
 
   useEffect(() => {
-    const controller = new AbortController();
-    const controllerBookings = new AbortController();
-    const controllerVotes = new AbortController();
+    // const controller = new AbortController(null);
+    // const controllerBookings = new AbortController();
+    // const controllerVotes = new AbortController();
     get(
-      `http://localhost:4000/users/${parseJwt(token).idUser}`,
+      `http://192.168.1.16:4000/users/${parseJwt(token).idUser}`,
       (data) => {
         setUser(data.userInfo);
       },
       (error) => console.error(error),
       token,
-      controller
+      null
     );
     if (User.idUser) {
       get(
-        `http://localhost:4000/users/${User.idUser}/bookings`,
+        `http://192.168.1.16:4000/users/${User.idUser}/bookings`,
         (data) => {
           setBookings(data.bookings);
         },
@@ -68,10 +69,10 @@ export default function Profile({ token, setToken }) {
           console.error(error);
         },
         token,
-        controllerBookings
+        null
       );
       get(
-        `http://localhost:4000/users/${User.idUser}/votes`,
+        `http://192.168.1.16:4000/users/${User.idUser}/votes`,
         (data) => {
           if (data.status === 'ok') {
             setVotes(data.Valoraciones);
@@ -81,19 +82,19 @@ export default function Profile({ token, setToken }) {
           console.error(error);
         },
         token,
-        controllerVotes
+        null
       );
     }
     return () => {
-      controller.abort();
-      controllerBookings.abort();
-      controllerVotes.abort();
+      // controller.abort();
+      // controllerBookings.abort();
+      // controllerVotes.abort();
     };
   }, [token, User.avatar, User.idUser]);
 
   function onSubmitDeleted(body, e) {
     del(
-      `http://localhost:4000/users/${User.idUser}`,
+      `http://192.168.1.16:4000/users/${User.idUser}`,
       body,
       (data) => {
         setToken('');
@@ -174,7 +175,7 @@ export default function Profile({ token, setToken }) {
             className='w-full h-full rounded-full'
             src={
               User.avatar
-                ? `http://localhost:4000/photo/${User.avatar}`
+                ? `http://192.168.1.16:4000/photo/${User.avatar}`
                 : require('../../Images/defProfile.png').default
             }
             alt='perfil de usuario'
@@ -305,7 +306,7 @@ export default function Profile({ token, setToken }) {
                     className='w-14 h-14 rounded-full m-2'
                     src={
                       vote.avatar
-                        ? 'http://localhost:4000/photo/' + vote.avatar
+                        ? 'http://192.168.1.16:4000/photo/' + vote.avatar
                         : require('../../Images/defProfile.png').default
                     }
                     alt='imagen de perfil'
@@ -368,7 +369,7 @@ function Delete({ setOverlay, Overlay, usuario }) {
 
   function onSubmit(body) {
     post(
-      'http://localhost:4000/users/login',
+      'http://192.168.1.16:4000/users/login',
       CreateFormData(body),
       (data) => {
         data.status === 'ok' && setCanDelete(true);
@@ -536,7 +537,7 @@ function BookingsComp({ Bookings, ShownBookings, User, setOverlay }) {
                     }
                     src={
                       booking.photo
-                        ? 'http://localhost:4000/photo/' + booking.photo
+                        ? 'http://192.168.1.16:4000/photo/' + booking.photo
                         : require('../../Images/defPicture.jpg').default
                     }
                     alt='alquiler'
@@ -577,11 +578,11 @@ function BookingsComp({ Bookings, ShownBookings, User, setOverlay }) {
  *
  */
 function CancelBooking({ setOverlay, info, Token }) {
-  const [Message, setMessage] = useState();
+  const [message, setMessage] = useState({ message: '', status: 'ok' });
 
   function Confirm(bookingCode) {
     get(
-      `http://localhost:4000/properties/${bookingCode}/cancel`,
+      `http://192.168.1.16:4000/properties/${bookingCode}/cancel`,
       (data) => {
         setMessage(data.message);
         setOverlay({ shown: false, info: {}, form: '' });
@@ -596,7 +597,7 @@ function CancelBooking({ setOverlay, info, Token }) {
 
   return (
     <div className='z-10 bg-white bg-opacity-75 justify-center fixed w-full h-full left-0 top-0 flex flex-col items-center py-20 overflow-scroll sm:overflow-hidden'>
-      {Message && <ConfirmMessage Message={Message} />}
+      {message.message && <Message message={message} setMessage={setMessage} />}
       <section className='cancel-booking filter drop-shadow-xl w-full p-4 flex flex-col gap-5 bg-white relative text-principal-gris overflow-y-auto md:w-3/4'>
         <button
           className='close-overlay absolute top-3 p-5 right-2'
@@ -707,7 +708,7 @@ function EditBooking({ setOverlay, info, Token }) {
           email: info.email,
         };
         put(
-          `http://localhost:4000/properties/${info.idProperty}/${bookingCode}`,
+          `http://192.168.1.16:4000/properties/${info.idProperty}/${bookingCode}`,
           CreateFormData(body),
           (data) => {
             if (data.status === 'ok') {

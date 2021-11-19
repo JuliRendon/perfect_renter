@@ -21,7 +21,7 @@ import {
   put,
 } from '../../Helpers/Api';
 import FileProperty from './FileProperty';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function NewProperty({ setOverlay, Token, EditProperty }) {
   const {
     register,
@@ -85,7 +85,7 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
     info: {},
     form: '',
   });
-
+  const [message, setMessage] = useState({ message: '', status: '' });
   const [Loader, setLoader] = useState(false);
   // Provincias
   const [Provinces, setProvinces] = useState([]);
@@ -111,22 +111,23 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
   function onSubmitProperty(body, e) {
     setLoader(true);
     post(
-      'http://localhost:4000/properties',
+      'http://192.168.1.16:4000/properties',
       CreateFormData(body),
       (data) => {
         if (PhotosOnUpload) {
           put(
-            `http://localhost:4000/properties/${data.property}`,
-            CreateFormDataMultipleFiles({
-              photos: PhotosOnUpload,
-            }),
+            `http://192.168.1.16:4000/properties/${data.property}`,
+            CreateFormDataMultipleFiles(PhotosOnUpload),
             (data) => {
               console.log('Success');
               reset();
-              alert('Inmueble subido con éxito.');
+              setMessage({
+                message: 'Inmueble subido con éxito.',
+                status: 'ok',
+              });
               setTimeout(() => {
                 setLoader(false);
-                window.location.reload();
+                // );
               }, 1500);
             },
             (error) => {
@@ -136,7 +137,7 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
           );
         } else {
           reset();
-          alert('Inmueble subido con éxito.');
+          setMessage({ message: 'Inmueble subido con éxito.', status: 'ok' });
         }
       },
       (data) => {
@@ -149,38 +150,38 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
   function onSubmitEdited(body, e) {
     e.preventDefault();
     put(
-      `http://localhost:4000/properties/${EditProperty.idProperty}`,
+      `http://192.168.1.16:4000/properties/${EditProperty.idProperty}`,
       CreateFormData(body),
       (data) => {
         console.log('Sucess');
-        alert(data.message);
+        setMessage({ message: data.message, status: 'ok' });
         setTimeout(() => {
-          window.location.reload();
+          // );
         }, 500);
       },
       (error) => {
-        setError(error.message);
+        setMessage({ message: error.message, status: 'error' });
       },
       Token
     );
   }
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      'http://localhost:4000/properties/location',
+      'http://192.168.1.16:4000/properties/location',
       (data) => {
         setProvinces(data.provinces);
         setCities(data.cities);
       },
       (error) => {
-        console.error(error);
+        setMessage({ message: error.message, status: 'error' });
       },
       null,
-      controller
+      null
     );
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, []);
 
@@ -188,28 +189,28 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
     const controller = new AbortController();
     if (EditProperty) {
       get(
-        `http://localhost:4000/properties/${EditProperty.idProperty}/photos`,
+        `http://192.168.1.16:4000/properties/${EditProperty.idProperty}/photos`,
         (data) => {
           if (data.status === 'ok') {
             setPhotos(data.photos);
           }
         },
         (error) => {
-          console.error(error);
+          setMessage({ message: error.message, status: 'error' });
         },
         null,
         controller
       );
     }
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, [EditProperty]);
 
   function deletePhoto(name) {
     if (EditProperty) {
       del(
-        `http://localhost:4000/properties/${EditProperty.idProperty}/photos/${name}`,
+        `http://192.168.1.16:4000/properties/${EditProperty.idProperty}/photos/${name}`,
         null,
         (data) => {
           if (data.status === 'ok') {
@@ -220,7 +221,7 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
           }
         },
         (error) => {
-          console.warn(error);
+          setMessage({ message: error.message, status: 'error' });
         },
         Token
       );
@@ -277,6 +278,7 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
 
   return (
     <div className='overlay z-30 bg-white bg-opacity-75 justify-center fixed w-full h-full left-0 top-0 flex flex-col items-center px-12 pt-24 pb-2 overflow-scroll sm:overflow-hidden'>
+      {message.message && <Message message={message} setMessage={Message} />}
       {Loader && (
         <div className='overlay z-50 fixed bg-gray-200 bg-opacity-50 w-full h-full left-0 top-0 flex flex-col items-center px-12 pt-24 pb-2 overflow-scroll sm:overflow-hidden'>
           <CircularProgress className='absolute top-0 left-0 right-0 bottom-0 m-auto' />{' '}
@@ -739,7 +741,7 @@ export default function NewProperty({ setOverlay, Token, EditProperty }) {
                             <FaPlus className='transform rotate-45' />
                           </button>
                           <img
-                            src={'http://localhost:4000/photo/' + photo.name}
+                            src={'http://192.168.1.16:4000/photo/' + photo.name}
                             alt='prueba'
                             className='w-20 h-20 object-cover'
                           />

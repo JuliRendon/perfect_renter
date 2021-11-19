@@ -268,7 +268,7 @@ function Delete({ setOverlay, Overlay, usuario }) {
 
   function onSubmit(body) {
     post(
-      'http://localhost:4000/users/login',
+      'http://192.168.1.16:4000/users/login',
       CreateFormData(body),
       (data) => {
         data.status === 'ok' && setCanDelete(true);
@@ -451,7 +451,7 @@ function CancelBooking({ setOverlay, info, Token }) {
 
   return (
     <div className='overlay z-20 p-4 bg-gray-400 bg-opacity-75 fixed w-full h-full left-0 top-0 flex flex-col items-center py-24 overscroll-scroll sm:overflow-hidden'>
-      {Message && <ConfirmMessage Message={Message} />}
+      {message.message && <ConfirmMessage Message={Message} />}
       <section className='cancel-booking shadow-custom w-full p-4 border-2 border-gray-700 flex flex-col gap-5 bg-gray-100 relative text-principal-gris overflow-y-scroll md:w-3/4'>
         <button
           className='close-overlay absolute top-3 p-5 right-2'

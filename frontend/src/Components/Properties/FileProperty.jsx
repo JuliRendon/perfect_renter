@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaPlus, FaRegArrowAltCircleUp } from 'react-icons/fa';
-import { CreateFormDataMultipleFiles, put } from '../../Helpers/Api';
+import {
+  CreateFormData,
+  CreateFormDataMultipleFiles,
+  put,
+} from '../../Helpers/Api';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function FileProperty({
   setOverlay,
   idProperty,
@@ -18,7 +22,7 @@ export default function FileProperty({
   const [Error, setError] = useState('');
   const [Button, setButton] = useState(false);
   const [FileName, setFileName] = useState([]);
-  const [Message, setMessage] = useState({ status: '', message: '' });
+  const [message, setMessage] = useState({ status: '', message: '' });
   const [TotalPhotos, setTotalPhotos] = useState(0);
   const hiddenInput = useRef(null);
   const [Loader, setLoader] = useState(false);
@@ -34,8 +38,9 @@ export default function FileProperty({
       return photos.push(body.photo[index]);
     });
 
-    if (photos) {
-      setPhotosOnUpload(photos);
+    if (FileName) {
+      setPhotosOnUpload(FileName);
+      console.log('EDITAR', FileName);
       setTimeout(() => {
         setLoader(false);
       }, 1000);
@@ -56,8 +61,10 @@ export default function FileProperty({
       return photos.push(body.photo[index]);
     });
     put(
-      `http://localhost:4000/properties/${editProperty}`,
-      CreateFormDataMultipleFiles(photos),
+      `http://192.168.1.16:4000/properties/${editProperty}`,
+      photos.length > 1
+        ? CreateFormDataMultipleFiles(photos)
+        : CreateFormData({ photo: photos[0] }),
       (data) => {
         if (data.status === 'ok') {
           console.log('Sucess');
@@ -65,7 +72,6 @@ export default function FileProperty({
             setButton(false);
             setLoader(false);
             setFileName('');
-            window.location.reload();
           }, 500);
           setMessage({ status: 'ok', message: '¡Fotos subidas con éxito!' });
         }
@@ -85,6 +91,7 @@ export default function FileProperty({
 
   return (
     <div className='overlay z-20 bg-white bg-opacity-75 justify-center fixed w-full h-full left-0 top-0 flex flex-col items-center px-12 py-24 overscroll-scroll sm:overflow-hidden'>
+      {message.message && <Message message={message} setMessage={Message} />}
       {Loader && (
         <div className='overlay z-50 fixed bg-gray-200 bg-opacity-50 w-full h-full left-0 top-0 flex flex-col items-center px-12 pt-24 pb-2 overflow-scroll sm:overflow-hidden'>
           <CircularProgress className='absolute top-0 left-0 right-0 bottom-0 m-auto' />{' '}
@@ -143,7 +150,9 @@ export default function FileProperty({
                               <FaPlus className='transform rotate-45' />
                             </button>
                             <img
-                              src={'http://localhost:4000/photo/' + photo.name}
+                              src={
+                                'http://192.168.1.16:4000/photo/' + photo.name
+                              }
                               alt='prueba'
                               className='w-20 h-20 object-cover'
                             />
@@ -168,6 +177,7 @@ export default function FileProperty({
                                 e.preventDefault();
                                 e.stopPropagation();
                                 setLoader(true);
+                                console.log(FileName);
                                 setFileName(
                                   FileName.filter(
                                     (fileToRemove) =>

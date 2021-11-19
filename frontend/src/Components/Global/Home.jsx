@@ -167,16 +167,16 @@ export function RentersList() {
   const [Users, setUsers] = useState([]);
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     if (Token) {
       get(
-        'http://localhost:4000/users',
+        'http://192.168.1.16:4000/users',
         (data) => {
           setUsers(data.users);
         },
         (error) => console.error(error),
         Token,
-        controller
+        null
       );
     } else {
       setUsers([
@@ -207,7 +207,7 @@ export function RentersList() {
       ]);
     }
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, [Token]);
   const buttonStyle =
@@ -265,8 +265,8 @@ export function Renter({ user, Token }) {
         className=' w-full h-48 object-cover '
         src={
           user.avatar
-            ? 'http://localhost:4000/photo/' + user.avatar
-            : 'http://localhost:4000/photo/fotoperfil7.jpg'
+            ? 'http://192.168.1.16:4000/photo/' + user.avatar
+            : 'http://192.168.1.16:4000/photo/fotoperfil7.jpg'
         }
         alt=''
       />

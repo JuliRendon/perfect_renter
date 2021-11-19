@@ -10,7 +10,7 @@ import Email from './Inputs/Email';
 import FirstName from './Inputs/FirstName';
 import { FaPlus } from 'react-icons/fa';
 import useProperties from '../../Helpers/Hooks/useProperties';
-import Message from '../Properties/PropertyInfo';
+import { Message } from '../Properties/PropertyInfo';
 
 export default function ContactTenant({ info, setOverlay, Token, properties }) {
   const {
@@ -21,19 +21,19 @@ export default function ContactTenant({ info, setOverlay, Token, properties }) {
     control,
   } = useForm();
   const [Properties] = useProperties();
+  const [message, setMessage] = useState({ message: '', status: '' });
   const [userProperties, setUserProperties] = useState([]);
 
   function onSubmit(body, e) {
     e.preventDefault();
     post(
-      `http://localhost:4000/users/${info.idUser}/contact`,
+      `http://192.168.1.16:4000/users/${info.idUser}/contact`,
       CreateFormData(body),
       (data) => {
-        alert(data.message);
-        window.location.reload();
+        setMessage({ message: data.message, status: 'ok' });
       },
       (error) => {
-        console.error(error);
+        setMessage({ message: error.message, status: 'error' });
       },
       Token
     );
@@ -61,6 +61,7 @@ export default function ContactTenant({ info, setOverlay, Token, properties }) {
 
   return (
     <div className='overlay z-30 bg-white bg-opacity-75 fixed w-full h-full left-0 top-0 flex flex-col items-center pt-24 overscroll-scroll sm:overflow-hidden'>
+      {message.message && <Message message={message} setMessage={Message} />}
       <section className='contact drop-shadow-2xl filter pt-2 flex flex-col gap-5 bg-white relative text-principal-gris overflow-y-auto sm:w-3/4 w-11/12'>
         <button
           className='close-overlay absolute top-3 p-5 right-2'
@@ -218,7 +219,7 @@ export default function ContactTenant({ info, setOverlay, Token, properties }) {
               className='w-60 h-60 object-cover rounded-circle'
               src={
                 info.avatar
-                  ? `http://localhost:4000/photo/${info.avatar}`
+                  ? `http://192.168.1.16:4000/photo/${info.avatar}`
                   : require('../../Images/defProfile.png').default
               }
               alt='imagen de perfil'

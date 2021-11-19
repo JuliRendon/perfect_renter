@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { CreateFormData, post } from '../../Helpers/Api';
 import Email from './Inputs/Email';
 import FirstName from './Inputs/FirstName';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function ContactUs() {
+  const [message, setMessage] = useState({ message: '', status: '' });
   const {
     handleSubmit,
     register,
@@ -15,14 +16,13 @@ export default function ContactUs() {
   function onSubmit(body, e) {
     e.preventDefault();
     post(
-      'http://localhost:4000/contact',
+      'http://192.168.1.16:4000/contact',
       CreateFormData(body),
       (data) => {
-        alert(data.message);
-        window.location.reload();
+        setMessage({ message: data.message, status: 'ok' });
       },
       (error) => {
-        console.error(error);
+        setMessage({ message: error.message, status: 'error' });
       }
     );
   }
@@ -33,6 +33,7 @@ export default function ContactUs() {
 
   return (
     <section className='pt-20 sm:pb-40 flex flex-col items-center bg-white'>
+      {message.message && <Message message={message} setMessage={Message} />}
       <h1 className='sm:text-5xl text-3xl p-4 w-full text-center bg-principal-1 text-principal-gris sm:p-4'>
         Perfect Renter
       </h1>

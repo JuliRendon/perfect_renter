@@ -43,9 +43,9 @@ export default function PropertyInfo(props) {
   }
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      `http://localhost:4000/properties/${Number(
+      `http://192.168.1.16:4000/properties/${Number(
         props.match.params.idProperty
       )}/photos`,
       (data) => {
@@ -53,10 +53,10 @@ export default function PropertyInfo(props) {
       },
       (error) => console.log(error),
       null,
-      controller
+      null
     );
     return () => {
-      controller.abort();
+      // controller.abort();
     };
   }, [props.match.params.idProperty]);
 
@@ -189,6 +189,7 @@ export default function PropertyInfo(props) {
               >
                 {SlideImgs.length > 0 ? (
                   SlideImgs.map((img, i) => {
+                    console.log(img.name);
                     return (
                       <img
                         key={i}
@@ -198,7 +199,7 @@ export default function PropertyInfo(props) {
                             ? ' h-96 w-full'
                             : ' sm:h-full w-full sm:max-h-lg max-w-2xl object-contain m-auto'
                         }`}
-                        src={'http://localhost:4000/photo/' + img.name}
+                        src={'http://192.168.1.16:4000/photo/' + img.name}
                         alt='default'
                       />
                     );
@@ -352,7 +353,7 @@ export default function PropertyInfo(props) {
   );
 }
 
-function Message({ message, setMessage }) {
+export function Message({ message, setMessage }) {
   if (message.status === 'ok') {
     return (
       <div className='fixed w-full bg-white justify-center bg-opacity-75 h-full left-0 top-0 flex flex-col items-center py-24 overflow-scroll sm:overflow-hidden z-30'>
@@ -364,6 +365,7 @@ function Message({ message, setMessage }) {
           <button
             onClick={() => {
               setMessage({ status: '', message: '' });
+              window.location.reload();
             }}
             className='select-none w-full self-center text-center bg-principal-1 text-principal-gris border border-yellow-300 text-black py-2 px-3 hover:bg-gray-Primary hover:text-principal-1 transform ease-in duration-200 cursor-pointer'
           >

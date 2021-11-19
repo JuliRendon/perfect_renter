@@ -9,9 +9,9 @@ export default function ManageBokking({ match }) {
   const [booking, setBooking] = useState({});
 
   function acceptBooking() {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      `http://localhost:4000/properties/${match.params.bookingCode}/accept`,
+      `http://192.168.1.16:4000/properties/${match.params.bookingCode}/accept`,
       (data) => {
         setBooking(data);
       },
@@ -20,14 +20,14 @@ export default function ManageBokking({ match }) {
         setBooking(error);
       },
       Token,
-      controller
+      null
     );
   }
 
   function cancelBooking() {
-    const controller = new AbortController();
+    // const controller = new AbortController();
     get(
-      `http://localhost:4000/properties/${match.params.bookingCode}/cancel`,
+      `http://192.168.1.16:4000/properties/${match.params.bookingCode}/cancel`,
       (data) => {
         setBooking(data);
       },
@@ -35,7 +35,7 @@ export default function ManageBokking({ match }) {
         setBooking(error);
       },
       Token,
-      controller
+      null
     );
   }
 

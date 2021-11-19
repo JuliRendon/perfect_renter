@@ -172,7 +172,7 @@ const bookProperty = async (req, res, next) => {
       thead {
           height: 20vh;
           width: 100%;
-          background: linear-gradient(rgba(16, 16, 16, 0.3),rgba(16, 16, 16, 0.9)),url('http://localhost:4000/photo/portada-nosotros.jpg');
+          background: linear-gradient(rgba(16, 16, 16, 0.3),rgba(16, 16, 16, 0.9)),url('http://192.168.1.16:4000/photo/portada-nosotros.jpg');
           background-repeat: no-repeat;
           background-size: cover;
           background-position: center;
@@ -217,7 +217,7 @@ const bookProperty = async (req, res, next) => {
      <thead>
           <tr class="thead-tr">
               <td>
-                  <a href="http://localhost:3000/home" target="__blank" rel="noreferer"><h1 style="margin-bottom: -10px;">Perfect Renter</h1></a>
+                  <a href="http://192.168.1.16:3000/home" target="__blank" rel="noreferer"><h1 style="margin-bottom: -10px;">Perfect Renter</h1></a>
                   <h3>El lugar para encontrar tu hogar</h3>
               </td>
           </tr>
@@ -257,12 +257,12 @@ const bookProperty = async (req, res, next) => {
           <tfoot>
             <th>
                 <button>
-                  <a href="http://localhost:3000/alquileres/${bookingCode}/accept"
+                  <a href="http://192.168.1.16:3000/alquileres/${bookingCode}/accept"
                 >ACEPTAR RESERVA</a></button>
                 <span><span/>
                 <span><span/>
                 <button>
-                  <a href="http://localhost:3000/alquileres/${bookingCode}/cancel"
+                  <a href="http://192.168.1.16:3000/alquileres/${bookingCode}/cancel"
                 >CANCELAR RESERVA</a></button>
             </th>
           </tfoot>
@@ -298,7 +298,7 @@ const bookProperty = async (req, res, next) => {
       <tfoot>
         <th>
         <button>
-            <a href="http://localhost:3000/alquileres/${bookingCode}/cancel">CANCELAR RESERVA</a>
+            <a href="http://192.168.1.16:3000/alquileres/${bookingCode}/cancel">CANCELAR RESERVA</a>
         </button>
         </th>
       </tfoot>

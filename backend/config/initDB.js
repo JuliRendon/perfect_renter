@@ -255,12 +255,13 @@ async function main() {
     // Obtenemos los datos a introducir a la BBDD
     const CustomDataDatabasePath = path.join(__dirname, 'DatosBBDD.sql');
     const CustomDataDatabase = fs.readFile(CustomDataDatabasePath, 'utf-8');
-
-    await connection.query(
+    if (NODE_ENV !== 'test') {
+      await connection.query(
+        `
+      ${await CustomDataDatabase}
       `
-    ${await CustomDataDatabase}
-    `
-    );
+      );
+    }
     console.log('Datos de prueba creados');
   } catch (error) {
     console.error(error.message);

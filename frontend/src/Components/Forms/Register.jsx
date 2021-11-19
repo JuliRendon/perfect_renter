@@ -19,7 +19,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { Box } from '@mui/system';
 import { format } from 'date-fns';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function Register({
   Token,
   usuario,
@@ -60,7 +60,7 @@ export default function Register({
         }
   );
   const formFunctions = { register, errors };
-
+  const [message, setMessage] = useState({ message: '', status: '' });
   // States
   const [Error, setError] = useState('');
   const [DatePicker, setDatePicker] = useState(false);
@@ -74,12 +74,11 @@ export default function Register({
       setError('Debes ser mayor de edad.');
     } else {
       post(
-        'http://localhost:4000/users',
+        'http://192.168.1.16:4000/users',
         CreateFormData(body),
         (data) => {
           console.log('Success');
-          alert(data.message);
-          window.location.reload();
+          setMessage({ message: data.message, status: 'ok' });
           reset();
           setOverlay({ shown: false, userInfo: {} });
         },
@@ -94,13 +93,12 @@ export default function Register({
   function onSubmitEdited(body, e) {
     e.preventDefault();
     put(
-      `http://localhost:4000/users/${usuario.idUser}`,
+      `http://192.168.1.16:4000/users/${usuario.idUser}`,
       CreateFormData(body),
       (data) => {
         console.log('Success');
-        alert(data.message);
+        setMessage({ message: data.message, status: 'ok' });
         reset();
-        window.location.reload();
       },
       (error) => {
         setError(error.message);
@@ -119,6 +117,7 @@ export default function Register({
   const bio = watch('bio');
   return (
     <div className={registerComponentStyle}>
+      {message.message && <Message message={message} setMessage={Message} />}
       <section
         className={
           Token

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { put } from '../../Helpers/Api';
 import Email from './Inputs/Email';
-
+import { Message } from '../Properties/PropertyInfo';
 export default function RecoverPass() {
   const {
     register,
@@ -11,25 +11,29 @@ export default function RecoverPass() {
   } = useForm();
 
   const formFunctions = { register, errors };
-
+  const [message, setMessage] = useState({ message: '', status: '' });
   function onSubmit(body, e) {
     e.preventDefault();
 
     put(
-      'http://localhost:4000/users/password/recover',
+      'http://192.168.1.16:4000/users/password/recover',
       body,
       (data) => {
         console.log(data);
-        alert('¡Revisa tu correo electrónico para cambiar la contraseña!');
+        setMessage({
+          message: '¡Revisa tu correo electrónico para cambiar la contraseña!',
+          status: 'ok',
+        });
       },
       (error) => {
-        console.log(error);
+        setMessage({ message: error.message, status: 'error' });
       }
     );
   }
 
   return (
     <section className='flex flex-col gap-5 items-center justify-center pt-24'>
+      {message.message && <Message message={message} setMessage={Message} />}
       <h1 className='border-b-4 border-gray-600 text-3xl'>
         Recuperación de contraseña
       </h1>

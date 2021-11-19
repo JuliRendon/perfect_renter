@@ -6,11 +6,11 @@ export default function useProperties() {
   const [properties, setProperty] = useState([]);
   const location = useLocation();
   useEffect(() => {
-    const controller = new AbortController();
-    const controllerSearch = new AbortController();
+    // const controller = new AbortController();
+    // const controllerSearch = new AbortController();
     if (location.search) {
       get(
-        `http://localhost:4000/properties${location.search}`,
+        `http://192.168.1.16:4000/properties${location.search}`,
         (data) => {
           if (data.message !== 'No hay conicidencias para su busqueda') {
             setProperty(data.properties);
@@ -20,11 +20,11 @@ export default function useProperties() {
         },
         (error) => console.error(error),
         null,
-        controller
+        null
       );
     } else {
       get(
-        'http://localhost:4000/properties',
+        'http://192.168.1.16:4000/properties',
         (data) => {
           if (data.message !== 'No hay conicidencias para su busqueda') {
             setProperty(data.properties);
@@ -32,12 +32,12 @@ export default function useProperties() {
         },
         (error) => console.error(error),
         null,
-        controllerSearch
+        null
       );
     }
     return () => {
-      controller.abort();
-      controllerSearch.abort();
+      // controller.abort();
+      // controllerSearch.abort();
     };
   }, [location]);
 

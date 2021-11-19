@@ -84,7 +84,7 @@ const newUser = async (req, res, next) => {
         <tfoot>
             <th>
               <button>
-              <a href="http://localhost:3000/verificar/${registrationCode}">VERIFICAR</a>
+              <a href="http://192.168.1.16:3000/verificar/${registrationCode}">VERIFICAR</a>
               </button>
             </th>
         </tfoot>

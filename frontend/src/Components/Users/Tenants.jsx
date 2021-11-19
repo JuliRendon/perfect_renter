@@ -24,12 +24,12 @@ export default function UsersList(props) {
 
   // Necesario estar logueado
   useEffect(() => {
-    const controller = new AbortController();
-    const controllerSearch = new AbortController();
-    const controllerBookings = new AbortController();
+    // const controller = new AbortController();
+    // const controllerSearch = new AbortController();
+    // const controllerBookings = new AbortControllenullr();
     if (location.search) {
       get(
-        `http://localhost:4000/users${location.search}`,
+        `http://192.168.1.16:4000/users${location.search}`,
         (data) => {
           if (data.message !== 'No hay conicidencias para su busqueda') {
             setUsers(data.users);
@@ -40,11 +40,11 @@ export default function UsersList(props) {
         },
         (error) => console.error(error),
         Token,
-        controller
+        null
       );
     } else {
       get(
-        'http://localhost:4000/users',
+        'http://192.168.1.16:4000/users',
         (data) => {
           if (data.message !== 'No hay conicidencias para su busqueda') {
             setUsers(data.users);
@@ -55,10 +55,12 @@ export default function UsersList(props) {
         },
         (error) => console.error(error),
         Token,
-        controllerSearch
+        null
       );
       get(
-        `http://localhost:4000/users/${parseJwt(Token).idUser}/bookings/renter`,
+        `http://192.168.1.16:4000/users/${
+          parseJwt(Token).idUser
+        }/bookings/renter`,
         (data) => {
           setBookings(data.bookings);
         },
@@ -66,13 +68,13 @@ export default function UsersList(props) {
           console.error(error);
         },
         Token,
-        controllerBookings
+        null
       );
     }
     return () => {
-      controller.abort();
-      controllerSearch.abort();
-      controllerBookings.abort();
+      // controller.abort();
+      // controllerSearch.abort();
+      // controllerBookings.abort();
     };
   }, [Token, location.search]);
 

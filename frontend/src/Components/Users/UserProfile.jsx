@@ -16,11 +16,11 @@ export default function UserProfile({ match }) {
   const [Votes, setVotes] = useState([]);
 
   useEffect(() => {
-    const controller = new AbortController();
-    const controllerBookings = new AbortController();
-    const controllerVotes = new AbortController();
+    // const controller = new AbortController();
+    // const controllerBookings = new AbortController();
+    // const controllerVotes = new AbortController();
     get(
-      `http://localhost:4000/users/${match.params.idUser}`,
+      `http://192.168.1.16:4000/users/${match.params.idUser}`,
       (data) => {
         setUser(data.userInfo);
       },
@@ -28,10 +28,10 @@ export default function UserProfile({ match }) {
         console.error(error);
       },
       Token,
-      controller
+      null
     );
     get(
-      `http://localhost:4000/users/${match.params.idUser}/bookings/renter`,
+      `http://192.168.1.16:4000/users/${match.params.idUser}/bookings/renter`,
       (data) => {
         if (data.status === 'ok') {
           setBookings(data.bookings);
@@ -41,10 +41,10 @@ export default function UserProfile({ match }) {
         console.error(error);
       },
       Token,
-      controllerBookings
+      null
     );
     get(
-      `http://localhost:4000/users/${match.params.idUser}/votes`,
+      `http://192.168.1.16:4000/users/${match.params.idUser}/votes`,
       (data) => {
         if (data.status === 'ok') {
           setVotes(data.Valoraciones);
@@ -54,12 +54,12 @@ export default function UserProfile({ match }) {
         console.error(error);
       },
       Token,
-      controllerVotes
+      null
     );
     return () => {
-      controller.abort();
-      controllerBookings.abort();
-      controllerVotes.abort();
+      // controller.abort();
+      // controllerBookings.abort();
+      // controllerVotes.abort();
     };
   }, [match.params.idUser, Token]);
 
@@ -85,7 +85,7 @@ export default function UserProfile({ match }) {
               className=' w-60 h-60 object-cover rounded-circle'
               src={
                 user.avatar
-                  ? `http://localhost:4000/photo/${user.avatar}`
+                  ? `http://192.168.1.16:4000/photo/${user.avatar}`
                   : require('../../Images/defProfile.png').default
               }
               alt='imagen de perfil'
@@ -174,7 +174,8 @@ export default function UserProfile({ match }) {
                           className='flex-grow object-cover w-full h-full'
                           src={
                             booking.photo
-                              ? 'http://localhost:4000/photo/' + booking.photo
+                              ? 'http://192.168.1.16:4000/photo/' +
+                                booking.photo
                               : require('../../Images/defPicture.jpg').default
                           }
                           alt='alquiler'
@@ -271,7 +272,7 @@ export default function UserProfile({ match }) {
                       className='w-14 h-14 rounded-full m-2'
                       src={
                         vote.avatar
-                          ? 'http://localhost:4000/photo/' + vote.avatar
+                          ? 'http://192.168.1.16:4000/photo/' + vote.avatar
                           : require('../../Images/defProfile.png').default
                       }
                       alt='imagen de perfil'

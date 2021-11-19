@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { put } from '../../Helpers/Api';
 import Password from './Inputs/Password';
+import { Message } from '../Properties/PropertyInfo';
 
 export default function ResetPass({ match }) {
   const [ErrorRep, setError] = useState(false);
@@ -13,7 +14,7 @@ export default function ResetPass({ match }) {
   } = useForm();
 
   const formFunctions = { register, errors };
-
+  const [message, setMessage] = useState({ message: '', status: '' });
   const error = 'Las contraseñas deben coincidir.';
   const buttonStyle =
     'select-none w-full self-center text-center bg-principal-1 text-principal-gris border border-yellow-300 text-black py-2 px-3 hover:bg-gray-Primary hover:text-principal-1 transform ease-in duration-200 cursor-pointer';
@@ -21,6 +22,7 @@ export default function ResetPass({ match }) {
   return (
     <>
       <section className='flex flex-col items-center justify-center gap-6 pt-10'>
+        {message.message && <Message message={message} setMessage={Message} />}
         <h1 className='border-b-4 border-gray-600 text-3xl'>
           Recuperación de contraseña:
         </h1>
@@ -31,16 +33,17 @@ export default function ResetPass({ match }) {
               setError(true);
             } else {
               put(
-                `http://localhost:4000/users/password/recover/${match.params.idUser}/${match.params.recoverCode}`,
+                `http://192.168.1.16:4000/users/password/recover/${match.params.idUser}/${match.params.recoverCode}`,
                 { password: data.password },
                 (data) => {
-                  alert(
-                    'Contraseña cambiada con éxito, se te redirigirá a la pantalla principal.'
-                  );
-                  window.location.reload();
+                  setMessage({
+                    message:
+                      'Contraseña cambiada con éxito, se te redirigirá a la pantalla principal.',
+                    status: 'ok',
+                  });
                 },
                 (error) => {
-                  console.error(error);
+                  setMessage({ message: error.message, status: 'error' });
                 }
               );
             }

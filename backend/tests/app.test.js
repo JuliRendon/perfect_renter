@@ -24,6 +24,7 @@ describe('User POST Endpoints', () => {
       birthDate: '1996-07-14',
     };
     const res = await api.post('/users').send(body);
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.message).toBe(
       'Usuario registrado, comprueba tu email para activarlo.'
@@ -41,6 +42,7 @@ describe('User POST Endpoints', () => {
       birthDate: '1996-07-14',
     };
     const res = await api.post('/users').send(body);
+
     expect(res.statusCode).toEqual(400);
     expect(res.body.message).toBe('Se requiere un email.');
   });

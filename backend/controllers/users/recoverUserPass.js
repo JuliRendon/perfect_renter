@@ -68,7 +68,7 @@ const recoverUserPass = async (req, res, next) => {
             <tfoot>
                 <td>
                     <button>
-                    <a href="http://localhost:3000/recuperar/${user[0].idUser}/${recoverCode}"
+                    <a href="http://192.168.1.16:3000/recuperar/${user[0].idUser}/${recoverCode}"
                     >RECUPERAR CONTRASEÑA</a></button>
                </td>
             </tfoot>
